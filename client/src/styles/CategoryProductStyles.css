@@ -1,0 +1,75 @@
+.category {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; /* Center items with spacing */
+    margin-top: 80px !important;
+    gap: 20px; /* Add gap between cards */
+  }
+  
+  .category .card {
+    background-color: rgba(128, 128, 128, 0.1); /* Slightly lighter background */
+    width: 18rem;
+    border-radius: 10px; /* Rounded corners for cards */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+  }
+  
+  .category .card:hover {
+    transform: translateY(-10px); /* Lift card on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+  }
+  
+  .category .card-name-price {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px; /* Add padding for spacing */
+  }
+  
+  .category .card-price {
+    color: green;
+    font-weight: bold;
+    font-size: 1.1em; /* Slightly larger font size */
+  }
+  
+  .category button {
+    border-radius: 0;
+    width: 100%;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px; /* Add padding for better button appearance */
+    background-color: #007bff; /* Button color */
+    color: white; /* Button text color */
+    border: none; /* Remove border */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    cursor: pointer; /* Pointer cursor on hover */
+  }
+  
+  .category button:hover {
+    background-color: #0056b3; /* Darker button color on hover */
+  }
+  
+  .category .card-text {
+    color: #5a5959;
+    padding: 10px 15px; /* Add padding for spacing */
+    font-size: 1em; /* Consistent font size */
+  }
+  
+  .category .card img {
+    border-top-left-radius: 10px; /* Match card border radius */
+    border-top-right-radius: 10px; /* Match card border radius */
+    transition: transform 0.3s ease; /* Smooth transition */
+  }
+  
+  .category .card img:hover {
+    transform: scale(1.05); /* Slightly enlarge image on hover */
+  }
+  
+  .category .card-img-top {
+    height: 300px !important;
+    object-fit: cover; /* Ensure image covers the area */
+    border-top-left-radius: 10px; /* Match card border radius */
+    border-top-right-radius: 10px; /* Match card border radius */
+  }
+  

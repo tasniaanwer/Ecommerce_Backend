@@ -1,0 +1,97 @@
+.product-details {
+  margin-top: 100px !important;
+}
+
+.product-details-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.product-details-info h6 {
+  margin-bottom: 20px !important;
+}
+
+.similar-products {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.similar-products .card {
+  background-color: rgba(128, 128, 128, 0.097);
+  width: 300px; /* Set a fixed width for uniformity */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 10px; /* Rounded corners for a modern look */
+  overflow: hidden; /* Ensure content doesn't overflow the card */
+}
+
+.similar-products .card:hover {
+  transform: translateY(-10px); /* Slight lift effect on hover */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+}
+
+.similar-products .card-name-price {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px; /* Add padding for better spacing */
+  font-size: 16px; /* Increase font size for readability */
+}
+
+.similar-products .card-price {
+  color: rgb(128, 0, 73);
+  font-weight: bold;
+}
+
+.similar-products button {
+  border: none;
+  border-radius: 0;
+  width: 100%;
+  border-top-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #20ade0; /* Primary button color */
+  color: white; /* White text color */
+  padding: 10px; /* Padding for better button appearance */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+}
+
+.similar-products button:hover {
+  background-color: #16c6d6; /* Darker shade on hover */
+  transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+.similar-products .card-text {
+  color: rgb(46, 149, 233);
+  padding: 10px; /* Add padding for better spacing */
+  font-size: 14px; /* Increase font size for readability */
+}
+
+.similar-products .card img {
+  width: 100%;
+  height: 200px; /* Set a fixed height for the images in the cards */
+  object-fit: cover;
+  transition: transform 0.3s ease; /* Smooth transition on hover */
+}
+
+.similar-products .card img:hover {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+.similar-products .card-img-top {
+  height: 200px; /* Set a fixed height */
+  object-fit: cover; /* Ensure image covers the container proportionally */
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* Add styles for the main product image */
+.product-details img {
+  width: 100%;
+  max-width: 350px; /* Set a max width */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 10px;
+}

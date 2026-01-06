@@ -1,0 +1,156 @@
+/* ===================================
+========= Creative Products Grid Styles ========== */
+
+.creative-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 40px;
+  margin-bottom: 60px;
+  padding: 20px 0;
+}
+
+/* Enhanced Animation for Grid Items */
+.creative-products-grid > * {
+  animation-duration: 0.6s;
+  animation-fill-mode: both;
+}
+
+/* Staggered Animation Classes */
+.creative-products-grid > *:nth-child(1) { animation-delay: 0.1s; }
+.creative-products-grid > *:nth-child(2) { animation-delay: 0.2s; }
+.creative-products-grid > *:nth-child(3) { animation-delay: 0.3s; }
+.creative-products-grid > *:nth-child(4) { animation-delay: 0.4s; }
+.creative-products-grid > *:nth-child(5) { animation-delay: 0.5s; }
+.creative-products-grid > *:nth-child(6) { animation-delay: 0.6s; }
+
+/* Loading Animation for Products */
+@keyframes productFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.creative-product-card {
+  animation: productFadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+/* Responsive Grid */
+@media (max-width: 1200px) {
+  .creative-products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .creative-products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 15px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .creative-products-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 10px 0;
+  }
+}
+
+/* Enhanced Loading State */
+.creative-products-grid.loading {
+  position: relative;
+}
+
+.creative-products-grid.loading::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.1), transparent);
+  animation: shimmer 2s infinite;
+  z-index: 10;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Skeleton Loading Cards */
+.skeleton-card {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 20px;
+  height: 400px;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Hover Effects for Grid */
+.creative-products-grid:hover .creative-product-card {
+  filter: brightness(0.95);
+  transition: filter 0.3s ease;
+}
+
+.creative-products-grid:hover .creative-product-card:hover {
+  filter: brightness(1);
+  z-index: 10;
+}
+
+/* Performance Optimizations */
+.creative-products-grid {
+  will-change: transform, opacity;
+  contain: layout style paint;
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+  .creative-product-card {
+    animation: none;
+    opacity: 1;
+  }
+
+  .creative-products-grid.loading::before {
+    animation: none;
+  }
+
+  .creative-products-grid:hover .creative-product-card {
+    filter: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .creative-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .creative-product-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+}

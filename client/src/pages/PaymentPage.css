@@ -1,0 +1,58 @@
+.payment-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background-color: #f8f9fa; /* Light background color */
+  }
+  
+  .payment-container {
+    width: 100%; /* Full width */
+    max-width: 400px; /* Maximum width for form */
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .payment-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .half-width {
+    display: inline-block;
+    width: calc(50% - 10px); /* Adjust for spacing */
+  }
+  
+  .half-width + .half-width {
+    margin-left: 20px; /* Space between half-width fields */
+  }
+  
+  .submit-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .payment-success {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .payment-success h2 {
+    color: green;
+  }
+  
