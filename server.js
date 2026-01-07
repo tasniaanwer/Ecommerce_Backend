@@ -11,6 +11,7 @@ import authRoute from "./routes/authRoute.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import bkashPaymentRoute from "./routes/bkashPayment.routes.js"; // ✅ ADD THIS
+import stripePaymentRoute from "./routes/stripePayment.routes.js"; // ✅ Stripe payment route
 
 // config env
 dotenv.config();
@@ -33,6 +34,8 @@ app.use("/api/v1/product", productRoutes);
 
 // ✅ bKash route
 app.use("/api/bkash", bkashPaymentRoute);
+// ✅ Stripe route
+app.use("/api/stripe", stripePaymentRoute);
 
 // test route
 app.get("/", (req, res) => {

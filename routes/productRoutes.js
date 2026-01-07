@@ -14,6 +14,7 @@ import {
   searchProductController,
   updateProductController,
   mockPaymentController,
+  createOrderController,
 
 } from "../controllers/productController.js";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
@@ -95,5 +96,8 @@ router.get("/product-category/:slug", productCategoryController);
 
 // Mock Payment Route
 router.post("/mock-payment", requireSignIn, mockPaymentController);
+
+// Create Order Route (for Stripe and other payment methods)
+router.post("/create-order", requireSignIn, createOrderController);
 
 export default router;

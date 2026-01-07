@@ -4,6 +4,7 @@ import fs from "fs";
 import slugify from "slugify";
 import dotenv from "dotenv";
 import orderModel from "../models/orderModel.js";  // Ensure you have an order model
+import mongoose from "mongoose";
 
 
 dotenv.config();
@@ -375,6 +376,131 @@ export const mockPaymentController = async (req, res) => {
       success: false,
       message: "Error in processing payment",
       error,
+    });
+  }
+};
+
+// Create Order Controller (for Stripe and other payment methods)
+export const createOrderController = async (req, res) => {
+  try {
+    const { cart, paymentMethod, paymentId, amount } = req.body;
+
+    if (!cart || !Array.isArray(cart) || cart.length === 0) {
+      return res.status(400).send({
+        success: false,
+        message: "Cart is empty",
+      });
+    }
+
+    // Extract product IDs from cart
+    const productIds = cart.map((item) => item._id || item.id);
+
+    // Calculate total if not provided
+    let total = amount;
+    if (!total) {
+      total = cart.reduce((sum, item) => sum + Number(item.price || 0), 0);
+    }
+
+    // Debug: Log the cart structure
+    console.log("=== CART STRUCTURE DEBUG ===");
+    console.log("Cart items:", JSON.stringify(cart, null, 2));
+    
+    // Count quantity of each product in cart
+    // IMPORTANT: Each item in cart array = 1 unit purchased
+    // The item.quantity field is the PRODUCT'S stock quantity, NOT purchase quantity
+    // So we always count each cart item as 1 unit
+    const productQuantityMap = {};
+    cart.forEach((item, index) => {
+      const productId = item._id || item.id;
+      // Each cart item represents 1 unit purchased (regardless of item.quantity which is stock)
+      const purchaseQuantity = 1; // Always 1 unit per cart item
+      productQuantityMap[productId] = (productQuantityMap[productId] || 0) + purchaseQuantity;
+      console.log(`Cart item ${index}: ID=${productId}, Purchase Quantity=${purchaseQuantity}, Name=${item.name || 'N/A'}, Stock Quantity=${item.quantity || 'N/A'}`);
+    });
+
+    console.log("=== PRODUCT QUANTITY MAP ===");
+    console.log("Product quantity map:", JSON.stringify(productQuantityMap, null, 2));
+
+    // Reduce product quantities in database
+    for (const [productId, quantityToReduce] of Object.entries(productQuantityMap)) {
+      try {
+        // Convert productId to ObjectId if it's a string
+        let productObjectId = productId;
+        if (typeof productId === 'string' && mongoose.Types.ObjectId.isValid(productId)) {
+          productObjectId = new mongoose.Types.ObjectId(productId);
+        }
+        
+        // Find the product first to verify it exists and get current quantity
+        const product = await productModel.findById(productObjectId);
+        
+        if (!product) {
+          console.log(`⚠️ Product ${productId} not found in database`);
+          continue; // Skip this product
+        }
+
+        // Get current quantity
+        const currentQuantity = Number(product.quantity);
+        if (isNaN(currentQuantity) || currentQuantity === null || currentQuantity === undefined) {
+          console.log(`⚠️ Product ${productId} has invalid quantity: ${product.quantity}`);
+          continue; // Skip this product
+        }
+        
+        console.log(`📦 Product ${productId} (${product.name}): Current quantity = ${currentQuantity}, Reducing by = ${quantityToReduce}`);
+        
+        // Ensure we don't reduce below 0
+        const actualReduction = Math.min(quantityToReduce, currentQuantity);
+        
+        // Use $inc operator to decrement quantity atomically
+        // This ensures thread-safe updates and prevents race conditions
+        const updatedProduct = await productModel.findByIdAndUpdate(
+          productObjectId,
+          { $inc: { quantity: -actualReduction } }, // Decrement by actualReduction
+          { new: true }
+        );
+        
+        if (updatedProduct) {
+          const newQuantity = Number(updatedProduct.quantity) || 0;
+          console.log(`✅ Successfully reduced quantity for product ${productId} (${product.name}): ${currentQuantity} -> ${newQuantity} (reduced by ${actualReduction})`);
+          
+          // Double-check: ensure quantity is not negative
+          if (newQuantity < 0) {
+            console.log(`⚠️ Warning: Product ${productId} quantity became negative (${newQuantity}), setting to 0`);
+            await productModel.findByIdAndUpdate(productId, { quantity: 0 });
+          }
+        } else {
+          console.log(`❌ Failed to update product ${productId}`);
+        }
+      } catch (productError) {
+        console.error(`❌ Error reducing quantity for product ${productId}:`, productError);
+        console.error(`Error details:`, productError.message);
+        // Continue with other products even if one fails
+      }
+    }
+
+    const order = new orderModel({
+      products: productIds,
+      payment: {
+        method: paymentMethod || "stripe",
+        status: "success",
+        amount: total,
+        paymentId: paymentId,
+      },
+      buyer: req.user._id,
+    });
+
+    await order.save();
+
+    res.status(200).send({
+      success: true,
+      message: "Order created successfully",
+      order,
+    });
+  } catch (error) {
+    console.log("Create order error:", error);
+    res.status(500).send({
+      success: false,
+      message: "Error in creating order",
+      error: error.message,
     });
   }
 };
